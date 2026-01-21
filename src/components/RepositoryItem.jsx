@@ -8,7 +8,7 @@ const RepositoryItem = (prop) => {
         <View style={theme.flexRow}>
           <Image
             style={theme.imgSize}
-            source={{ uri: prop.item.ownerAvatarUrl }}  
+            source={{ uri: prop.item.ownerAvatarUrl }}
           />
           <View style={theme.flexCol}>
             <Text style={{ marginBottom: 5, fontWeight: "bold", fontSize: 20 }}>
@@ -56,15 +56,6 @@ const RepositoryItem = (prop) => {
           </View>
         </View>
       </View>
-      <View
-        style={{
-          height: 10,
-          marginTop: 20,
-          marginBotton: 20,
-          backgroundColor: "lightgray",
-          width: 365,
-        }}
-      ></View>
     </View>
   );
 };

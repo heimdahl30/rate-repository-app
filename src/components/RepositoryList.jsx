@@ -1,14 +1,21 @@
 import { FlatList, View, StyleSheet, TouchableHighlight } from "react-native";
+import { Link } from "react-router-native";
+
 import RepositoryItem from "./RepositoryItem";
 import { useState } from "react";
+
+import useRepositories from "../hooks/useRepositories";
 
 const styles = StyleSheet.create({
   separator: {
     height: 10,
+    backgroundColor: "black",
+    marginTop: 20,
+    marginBottom: 20,
   },
 });
 
-const repositories = [
+/*const repositories = [
   {
     id: "jaredpalmer.formik",
     fullName: "jaredpalmer/formik",
@@ -54,42 +61,40 @@ const repositories = [
     ownerAvatarUrl: "https://avatars3.githubusercontent.com/u/13142323?v=4",
   },
 ];
+*/
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
-  const [selectedItem, setSelectedItem] = useState(null);
+  const { repositories } = useRepositories();
 
-  const handlePress = (item) => {
+  const repositoryNodes = repositories
+    ? repositories.edges.map((edge) => edge.node)
+    : [];
+
+  /*const handlePress = (item) => {
     setSelectedItem(item);
   };
+  */
 
   const renderItem = ({ item }) => (
-    <TouchableHighlight
-      onPress={() => handlePress(item)}
-      underlayColor="#D3D3D3"
+    <Link
+      to={`/repositories/${encodeURIComponent(item.fullName)}`}
+      underlayColor="lightgray"
     >
       <View>
         <RepositoryItem item={item} />
       </View>
-    </TouchableHighlight>
+    </Link>
   );
 
   return (
-    <View>
-      {selectedItem ? (
-        <View>
-          <RepositoryItem item={selectedItem} />
-        </View>
-      ) : (
-        <FlatList
-          data={repositories}
-          ItemSeparatorComponent={ItemSeparator}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
-      )}
-    </View>
+    <FlatList
+      data={repositoryNodes}
+      ItemSeparatorComponent={ItemSeparator}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.fullName}
+    />
   );
 };
 

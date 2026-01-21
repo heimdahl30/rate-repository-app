@@ -1,8 +1,10 @@
 import Text from "./Text";
 import { TextInput, StyleSheet, Pressable, View } from "react-native";
-import { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import useSignIn from "../hooks/useSignIn";
+import AuthStorage from "../utils/authStorage";
+import { useNavigate } from "react-router-native";
 
 const initialValues = {
   username: "",
@@ -36,11 +38,31 @@ const validationSchema = yup.object().shape({
     .required("Password is required"),
 });
 
-const SignIn = ({ onSubmit }) => {
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
+    onSubmit: async (values) => {
+      const { username, password } = values;
+      console.log("u", username);
+      console.log("p", password);
+
+      try {
+        const { data } = await signIn({
+          username: username,
+          password: password,
+        });
+        if (data) {
+          console.log(data.authenticate.accessToken);
+          navigate("/");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
   });
 
   return (
