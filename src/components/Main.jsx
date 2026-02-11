@@ -1,8 +1,9 @@
 import { StyleSheet, View } from "react-native";
-import RepositoryList from "./RepositoryList";
+import RepositoryList from "./RepositoryListFolder/RepositoryList";
 import SingleRepoView from "./SingleRepoView";
-import SignIn from "./SignIn";
+import SignIn from "./SignInFolder/SignIn";
 import AppBar from "./AppBar";
+import ReviewForm from "./ReviewForm";
 import { Route, Routes, Navigate } from "react-router-native";
 
 const styles = StyleSheet.create({
@@ -19,10 +20,8 @@ const Main = () => {
       <AppBar />
       <Routes>
         <Route path="/" element={<RepositoryList />} />
-        <Route
-          path="/signIn"
-          element={<SignIn onSubmit={(values) => console.log(values)} />}
-        />
+        <Route path="/signIn" element={<SignIn />} />
+        <Route path="/reviewForm" element={<ReviewForm />} />
         <Route path="/repositories/:id" element={<SingleRepoView />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -1,9 +1,9 @@
 import { View, Text, Image } from "react-native";
-import theme from "../theme";
+import theme from "../../theme";
 
 const RepositoryItem = (prop) => {
   return (
-    <View style={theme.container}>
+    <View style={theme.container} testID="repositoryItem">
       <View style={theme.flexCol}>
         <View style={theme.flexRow}>
           <Image
@@ -31,15 +31,27 @@ const RepositoryItem = (prop) => {
         </View>
         <View style={theme.ratingsBox}>
           <View style={{ flexDirection: "column", alignItems: "center" }}>
-            <Text style={{ fontWeight: "bold", fontSize: 15 }}>
-              {Number((prop.item.stargazersCount / 1000).toFixed(1))}k
-            </Text>
+            {prop.item.stargazersCount < 1000 ? (
+              <Text style={{ fontWeight: "bold", fontSize: 15 }}>
+                {prop.item.stargazersCount}
+              </Text>
+            ) : (
+              <Text style={{ fontWeight: "bold", fontSize: 15 }}>
+                {Number((prop.item.stargazersCount / 1000).toFixed(1))}k
+              </Text>
+            )}
             <Text style={{ color: "gray" }}>Stars</Text>
           </View>
           <View style={{ flexDirection: "column", alignItems: "center" }}>
-            <Text style={{ fontWeight: "bold", fontSize: 15 }}>
-              {Number((prop.item.forksCount / 1000).toFixed(1))}k
-            </Text>
+            {prop.item.forksCount < 1000 ? (
+              <Text style={{ fontWeight: "bold", fontSize: 15 }}>
+                {prop.item.forksCount}
+              </Text>
+            ) : (
+              <Text style={{ fontWeight: "bold", fontSize: 15 }}>
+                {Number((prop.item.forksCount / 1000).toFixed(1))}k
+              </Text>
+            )}
             <Text style={{ color: "gray" }}>Forks</Text>
           </View>
           <View style={{ flexDirection: "column", alignItems: "center" }}>

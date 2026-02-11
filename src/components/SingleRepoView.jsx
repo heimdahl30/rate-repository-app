@@ -1,21 +1,41 @@
-import { View, Text } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  FlatList,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { useParams } from "react-router-native";
-import RepositoryItem from "./RepositoryItem";
-import useRepositories from "../hooks/useRepositories";
+import useRepository from "../hooks/useRepository";
+import ReviewItem from "./ReviewItem";
+import RepositoryInfo from "./RepositoryInfo";
+
+const styles = StyleSheet.create({
+  separator: {
+    height: 10,
+    backgroundColor: "black",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+});
+
+const ItemSeparator = () => <View style={styles.separator} />;
 
 const SingleRepoView = () => {
   const { id } = useParams();
   const decodedId = decodeURIComponent(id);
-  const { repositories } = useRepositories();
-  const repositoryNodes = repositories
-    ? repositories.edges.map((edge) => edge.node)
-    : [];
-
-  const repository = repositoryNodes.find(
-    (node) => node.fullName === decodedId,
-  );
+  const { loading, repository } = useRepository(decodedId);
 
   console.log(decodedId);
+
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   if (!repository) {
     return (
@@ -25,7 +45,21 @@ const SingleRepoView = () => {
     );
   }
 
-  return <RepositoryItem item={repository} />;
+  const reviews = repository.reviews
+    ? repository.reviews.edges.map((edge) => edge.node)
+    : [];
+
+  return (
+    <ScrollView>
+      <FlatList
+        data={reviews}
+        renderItem={({ item }) => <ReviewItem review={item} />}
+        keyExtractor={({ id }) => id}
+        ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+        ItemSeparatorComponent={ItemSeparator}
+      />
+    </ScrollView>
+  );
 };
 
 export default SingleRepoView;

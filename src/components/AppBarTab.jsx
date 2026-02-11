@@ -15,9 +15,9 @@ const AppBarTab = () => {
   console.log("user", user);
 
   const pressed = async () => {
+    navigate("/signIn");
     await authStorage.removeAccessToken();
     await apolloClient.resetStore();
-    navigate("/signIn");
   };
 
   if (user) {
@@ -25,6 +25,9 @@ const AppBarTab = () => {
       <View style={{ display: "flex", flexDirection: "row", gap: 15 }}>
         <Link to="/">
           <Text style={theme.appBarTitle}>Repositories</Text>
+        </Link>
+        <Link to="/reviewForm">
+          <Text style={theme.appBarTitle}>Create a review</Text>
         </Link>
         <Pressable onPress={pressed}>
           <Text style={theme.appBarTitle}>Sign Out</Text>
