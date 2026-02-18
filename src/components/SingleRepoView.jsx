@@ -1,10 +1,8 @@
 import {
   View,
   Text,
-  Button,
   FlatList,
-  StyleSheet,
-  ScrollView,
+  StyleSheet
 } from "react-native";
 import { useParams } from "react-router-native";
 import useRepository from "../hooks/useRepository";
@@ -25,7 +23,7 @@ const ItemSeparator = () => <View style={styles.separator} />;
 const SingleRepoView = () => {
   const { id } = useParams();
   const decodedId = decodeURIComponent(id);
-  const { loading, repository } = useRepository(decodedId);
+  const { loading, repository, fetchMore, hasNextPage } = useRepository(decodedId);
 
   console.log(decodedId);
 
@@ -49,16 +47,22 @@ const SingleRepoView = () => {
     ? repository.reviews.edges.map((edge) => edge.node)
     : [];
 
+  const onEndReach = () => {
+    if (!hasNextPage || loading) return;
+    console.log("End reached, fetching more...");
+    fetchMore();
+  };
+
   return (
-    <ScrollView>
-      <FlatList
-        data={reviews}
-        renderItem={({ item }) => <ReviewItem review={item} />}
-        keyExtractor={({ id }) => id}
-        ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
-        ItemSeparatorComponent={ItemSeparator}
-      />
-    </ScrollView>
+    <FlatList
+      data={reviews}
+      renderItem={({ item }) => <ReviewItem review={item} />}
+      keyExtractor={({ id }) => id}
+      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      ItemSeparatorComponent={ItemSeparator}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.01}
+    />
   );
 };
 

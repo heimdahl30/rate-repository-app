@@ -19,7 +19,7 @@ const RepositoryInfo = ({ repository }) => {
   };
 
   return (
-    <View style={{ marginBottom: "10px", paddingBottom: "5px" }}>
+    <View style={{ marginBottom: 10, paddingBottom: 5 }}>
       <RepositoryItem item={repository} />
       <Button title="Open in GitHub" onPress={openLink} />
       <View style={styles.separator} />

@@ -9,22 +9,22 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "blue",
     padding: 1,
-    borderRadius: "20px",
-    marginRight: "10px",
-    padding: "2px",
-    height: "40px",
-    width: "40px",
+    borderRadius: 20,
+    marginRight: 10,
+    padding: 2,
+    height: 40,
+    width: 40,
   },
   text: {
     alignSelf: "center",
     textAlign: "center",
     color: "blue",
     fontWeight: "bold",
-    fontSize: "15px",
+    fontSize: 15,
   },
   reviewText: {
     color: "black",
-    width: "40%",
+    width: "100%"
   },
 });
 
@@ -35,11 +35,11 @@ const ReviewItem = ({ review }) => {
         <View style={styles.box}>
           <Text style={styles.text}>{review.rating}</Text>
         </View>
-        <View style={theme.flexCol}>
-          <Text style={{ fontWeight: "500", fontSize: "25px" }}>
+        <View style={[theme.flexCol, { flex: 1 }]}>
+          <Text style={{ fontWeight: 500, fontSize: 25 }}>
             {review.user.username}
           </Text>
-          <Text style={{ color: "lightgray", fontSize: "20px" }}>
+          <Text style={{ color: "lightgray", fontSize: 20 }}>
             {format(parseISO(review.createdAt), "dd.MM.yyyy")}
           </Text>
           <Text style={styles.reviewText}>{review.text}</Text>

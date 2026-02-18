@@ -1,17 +1,18 @@
 import { useFormik } from "formik";
+import useCreateReview from "../hooks/useCreateReview"
+import { useNavigate } from "react-router-native";
 import * as yup from "yup";
-import { TextInput, StyleSheet, Pressable, View } from "react-native";
+import { TextInput, StyleSheet, Pressable, View, Text } from "react-native";
 
 const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "lightgray",
     borderRadius: 4,
-    height: 50,
+    minHeight: 50,
     marginBottom: 12,
-    marginLeft: 5,
-    marginRight: 5,
-    padding: 10,
+    marginHorizontal: 5,
+    paddingLeft: 7
   },
   errorBorder: {
     borderColor: "#d73a4a",
@@ -19,35 +20,56 @@ const styles = StyleSheet.create({
 });
 
 const validationSchema = yup.object().shape({
-  ownerUsername: yup
+  ownerName: yup
     .string()
     .min(2, "Name should be of 2 letters at least")
     .required("Owner's username is required"),
   repositoryName: yup
     .string()
-    .min(4, "Should be at least 4 characters")
+    .min(3, "Should be at least 3 characters")
     .required("Repository's name is required"),
   rating: yup
-    .string()
+    .number()
     .required("Rating is required")
     .test("is-num-0-100", "Rating must be a number 0-100", (val) => {
       return val != null && parseInt(val) >= 0 && parseInt(val) < 101;
     }),
-  review: yup.string(),
+  text: yup.string(),
 });
 
 const initialValues = {
-  ownerUsername: "",
+  ownerName: "",
   repositoryName: "",
   rating: "",
-  review: "",
+  text: "",
 };
 
 const ReviewForm = () => {
+
+  const [createReview] = useCreateReview()
+  const navigate = useNavigate()
+
+
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
+    onSubmit: async (values) => {
+      const { ownerName, repositoryName, rating, text } = values;
+      try {
+        const { data } = await createReview({
+          ownerName,
+          repositoryName,
+          rating: parseInt(rating, 10),
+          text
+        });
+        if (data) {
+          console.log(data.createReview.repositoryId);
+          navigate(`/repositories/${encodeURIComponent(data.createReview.repositoryId)}`);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
   });
 
   return (
@@ -55,19 +77,19 @@ const ReviewForm = () => {
       <TextInput
         style={[
           styles.input,
-          formik.touched.ownerUsername &&
-            formik.errors.ownerUsername &&
-            styles.errorBorder,
+          formik.touched.ownerName &&
+          formik.errors.ownerName &&
+          styles.errorBorder,
         ]}
         placeholder="Owner's Username"
         placeholderTextColor="lightgray"
-        value={formik.values.ownerUsername}
-        onChangeText={formik.handleChange("ownerUsername")}
+        value={formik.values.ownerName}
+        onChangeText={formik.handleChange("ownerName")}
       />
 
-      {formik.touched.ownerUsername && formik.errors.ownerUsername && (
+      {formik.touched.ownerName && formik.errors.ownerName && (
         <Text style={{ color: "#d73a4a", marginTop: -10, marginBottom: 10 }}>
-          {formik.errors.ownerUsername}
+          {formik.errors.ownerName}
         </Text>
       )}
 
@@ -75,8 +97,8 @@ const ReviewForm = () => {
         style={[
           styles.input,
           formik.touched.repositoryName &&
-            formik.errors.repositoryName &&
-            styles.errorBorder,
+          formik.errors.repositoryName &&
+          styles.errorBorder,
         ]}
         placeholder="Repository's Name"
         placeholderTextColor="lightgray"
@@ -108,12 +130,12 @@ const ReviewForm = () => {
       )}
 
       <TextInput
-        style={[styles.input]}
+        style={styles.input}
         multiline
         placeholder="Write a review.."
         placeholderTextColor="lightgray"
-        value={formik.values.review}
-        onChangeText={formik.handleChange("review")}
+        value={formik.values.text}
+        onChangeText={formik.handleChange("text")}
       />
 
       <Pressable onPress={formik.handleSubmit}>

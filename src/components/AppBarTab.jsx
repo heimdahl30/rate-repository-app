@@ -29,6 +29,9 @@ const AppBarTab = () => {
         <Link to="/reviewForm">
           <Text style={theme.appBarTitle}>Create a review</Text>
         </Link>
+        <Link to="/reviewList">
+          <Text style={theme.appBarTitle}>My reviews</Text>
+        </Link>
         <Pressable onPress={pressed}>
           <Text style={theme.appBarTitle}>Sign Out</Text>
         </Pressable>
@@ -42,6 +45,9 @@ const AppBarTab = () => {
         </Link>
         <Link to="/signIn">
           <Text style={theme.appBarTitle}>Sign In</Text>
+        </Link>
+        <Link to="/signUpForm">
+          <Text style={theme.appBarTitle}>Sign Up</Text>
         </Link>
       </View>
     );

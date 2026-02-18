@@ -65,8 +65,8 @@ export const SignInContainer = ({ navigate, signIn }) => {
         style={[
           styles.input,
           formik.touched.username &&
-            formik.errors.username &&
-            styles.errorBorder,
+          formik.errors.username &&
+          styles.errorBorder,
         ]}
         placeholder="Username"
         placeholderTextColor="lightgray"
@@ -84,8 +84,8 @@ export const SignInContainer = ({ navigate, signIn }) => {
         style={[
           styles.input,
           formik.touched.password &&
-            formik.errors.password &&
-            styles.errorBorder,
+          formik.errors.password &&
+          styles.errorBorder,
         ]}
         secureTextEntry={true}
         placeholder="Password"
